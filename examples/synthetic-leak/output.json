@@ -1,0 +1,74 @@
+{
+  "tool": "touchstone",
+  "version": "0.1.0",
+  "generated_at": "2026-06-17T17:12:20.737Z",
+  "headline": "signal: SURVIVES",
+  "signal_alpha": {
+    "axis": "signal_alpha",
+    "verdict": "SURVIVES",
+    "n_snapshots": 2000,
+    "window": {
+      "from": "2026-06-06T00:00:00.000Z",
+      "to": "2026-06-12T22:35:00.000Z"
+    },
+    "n_episodes": 45,
+    "episodes_by_side": {
+      "high": 23,
+      "low": 22
+    },
+    "threshold": 1.5,
+    "cadence_snapshots_per_hour": 12,
+    "horizons_hours": [
+      6,
+      12,
+      24
+    ],
+    "multiple_comparison": {
+      "method": "BH",
+      "M": 6,
+      "bh_rejected": [
+        "24h LOW-signal(z<=-TH)",
+        "12h LOW-signal(z<=-TH)",
+        "24h HIGH-signal(z>=+TH)",
+        "6h LOW-signal(z<=-TH)"
+      ],
+      "bonferroni_survivors": [
+        "6h LOW-signal(z<=-TH)",
+        "12h LOW-signal(z<=-TH)",
+        "24h HIGH-signal(z>=+TH)",
+        "24h LOW-signal(z<=-TH)"
+      ],
+      "min_p": 0,
+      "min_p_cell": "24h LOW-signal(z<=-TH)"
+    },
+    "power": [
+      {
+        "n_episodes": 2,
+        "min_detectable_d": 2.46
+      },
+      {
+        "n_episodes": 8,
+        "min_detectable_d": 1.23
+      },
+      {
+        "n_episodes": 14,
+        "min_detectable_d": 0.93
+      },
+      {
+        "n_episodes": 16,
+        "min_detectable_d": 0.87
+      },
+      {
+        "n_episodes": 17,
+        "min_detectable_d": 0.84
+      },
+      {
+        "n_episodes": 19,
+        "min_detectable_d": 0.8
+      }
+    ],
+    "note": "No detectable edge != no edge exists. This verdict is bounded by statistical power at the episode-level n above."
+  },
+  "gate_selectivity": null,
+  "disclaimer": "Both axes are orthogonal to realized PnL. A SURVIVES / SELECTIVE result is necessary, not sufficient, for a profitable system."
+}
