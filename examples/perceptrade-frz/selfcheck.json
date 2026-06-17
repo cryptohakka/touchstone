@@ -1,0 +1,109 @@
+{
+  "tool": "touchstone",
+  "mode": "selfcheck",
+  "version": "0.1.0",
+  "generated_at": "2026-06-17T16:39:55.956Z",
+  "config": {
+    "leak_horizon_h": 24,
+    "alpha_grid": [
+      0,
+      0.05,
+      0.1,
+      0.2,
+      0.35,
+      0.5,
+      0.75,
+      1
+    ],
+    "threshold": 1.5,
+    "horizons": [
+      6,
+      12,
+      24
+    ],
+    "seed": 12345,
+    "M": 6
+  },
+  "baseline_signal": {
+    "min_p": 0.0261,
+    "bh_survivors": 0,
+    "verdict": "NO_EDGE"
+  },
+  "detection_power": {
+    "claim": "verdict flips NO_EDGE -> SURVIVES as genuine future-leak is mixed in",
+    "leak_curve": [
+      {
+        "alpha": 0,
+        "min_p": 0.0261,
+        "bh_survivors": 0,
+        "verdict": "NO_EDGE"
+      },
+      {
+        "alpha": 0.05,
+        "min_p": 0.0238,
+        "bh_survivors": 0,
+        "verdict": "NO_EDGE"
+      },
+      {
+        "alpha": 0.1,
+        "min_p": 0.0612,
+        "bh_survivors": 0,
+        "verdict": "NO_EDGE"
+      },
+      {
+        "alpha": 0.2,
+        "min_p": 0.0606,
+        "bh_survivors": 0,
+        "verdict": "NO_EDGE"
+      },
+      {
+        "alpha": 0.35,
+        "min_p": 0.003,
+        "bh_survivors": 2,
+        "verdict": "SURVIVES"
+      },
+      {
+        "alpha": 0.5,
+        "min_p": 0.0009,
+        "bh_survivors": 6,
+        "verdict": "SURVIVES"
+      },
+      {
+        "alpha": 0.75,
+        "min_p": 0,
+        "bh_survivors": 6,
+        "verdict": "SURVIVES"
+      },
+      {
+        "alpha": 1,
+        "min_p": 0,
+        "bh_survivors": 4,
+        "verdict": "SURVIVES"
+      }
+    ],
+    "first_survive_alpha": 0.35,
+    "spearman_alpha_minp": -0.81,
+    "passes": true
+  },
+  "null_shuffle": {
+    "claim": "time-shuffled signal must stay NO_EDGE",
+    "min_p": 0.1057,
+    "bh_survivors": 0,
+    "verdict": "NO_EDGE",
+    "passes": true
+  },
+  "null_sign_flip": {
+    "claim": "two-sided verdict must be invariant to z -> -z (label swap only)",
+    "min_p": 0.0261,
+    "bh_survivors": 0,
+    "verdict": "NO_EDGE",
+    "passes": true
+  },
+  "summary": {
+    "detection_power": true,
+    "no_false_positive": true,
+    "direction_invariant": true,
+    "overall": true
+  },
+  "note": "A self-check pass means the harness can detect a real edge and rejects noise on THIS dataset. It says nothing about whether the tested signal itself has edge — see the main verdict for that."
+}

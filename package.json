@@ -1,0 +1,13 @@
+{
+  "name": "touchstone",
+  "version": "0.1.0",
+  "description": "A falsification harness for trading signals. Strategy evaluation & benchmarking: forward-return -> beta-adjust -> episode-collapse -> multiple-comparison -> power on any scalar signal, plus a bootstrap Gate Selectivity Test on any block/skip decision log.",
+  "type": "module",
+  "bin": { "touchstone": "src/index.mjs" },
+  "scripts": {
+    "example": "node src/index.mjs examples/perceptrade-frz/input.json --map price=btcPrice signal=frZ --gate examples/perceptrade-frz/decisions.json --json examples/perceptrade-frz/output.json"
+  },
+  "engines": { "node": ">=18" },
+  "license": "MIT",
+  "dependencies": {}
+}
