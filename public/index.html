@@ -291,7 +291,7 @@
     <p class="punch reveal">Every strategy looks smart <span class="em">before episode collapse.</span></p>
 
     <div class="readout reveal" aria-label="Example verdict for the frZ signal">
-      <div class="cmd"><span class="pr">$</span> node src/index.mjs examples/perceptrade-frz/input.json --map signal=frZ --gate &hellip; --selfcheck</div>
+      <div class="cmd"><span class="pr">$</span> node src/index.mjs examples/perceptrade-frz/input.json --map price=btcPrice signal=frZ --gate examples/perceptrade-frz/decisions.json --selfcheck</div>
       <div class="rows">
         <div class="vrow">
           <span class="k">signal_alpha</span>
@@ -458,37 +458,52 @@
       <h2>Five ways an edge turns out to be nothing</h2>
       <p class="sub">Each stage strips away one source of false significance. A signal has to survive all five.</p>
 
-      <div class="gaunt">
-        <div class="stage reveal">
-          <div class="num">01</div>
-          <div><h3>Overlapping-window t-stats</h3>
-            <p>The impressive-looking number, computed per horizon &times; side. Usually it isn't real.</p></div>
+      <figure class="reveal" style="margin-top:32px">
+        <div class="fig">
+<svg viewBox="0 0 680 540" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Funnel: five stages that strip false significance. Only SURVIVES exits at the bottom.">
+<defs><marker id="fa" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="#6b665e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+<text x="340" y="26" font-family="ui-sans-serif,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="13" fill="#6b665e" text-anchor="middle">Signal enters with apparent edge</text>
+<line x1="340" y1="32" x2="340" y2="52" stroke="#6b665e" stroke-width="1.4" marker-end="url(#fa)"/>
+<rect x="120" y="56" width="440" height="54" rx="8" fill="#eeedfe" stroke="#afa9ec" stroke-width="0.8"/>
+<text x="340" y="79" font-family="ui-sans-serif,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="15" font-weight="700" fill="#26215c" text-anchor="middle">01 &middot; Overlapping-window t-stats</text>
+<text x="340" y="97" font-family="ui-sans-serif,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="12.5" fill="#534ab7" text-anchor="middle">Returns overlap &#8594; n inflated &#8594; t-stat is fake</text>
+<line x1="120" y1="83" x2="72" y2="83" stroke="#c0563b" stroke-width="1" marker-end="url(#fa)"/>
+<text x="68" y="87" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="11" fill="#b8472f" text-anchor="end">NO_EDGE</text>
+<line x1="340" y1="110" x2="340" y2="130" stroke="#6b665e" stroke-width="1.4" marker-end="url(#fa)"/>
+<rect x="132" y="134" width="416" height="54" rx="8" fill="#eeedfe" stroke="#afa9ec" stroke-width="0.8"/>
+<text x="340" y="157" font-family="ui-sans-serif,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="15" font-weight="700" fill="#26215c" text-anchor="middle">02 &middot; Autocorrelation correction</text>
+<text x="340" y="175" font-family="ui-sans-serif,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="12.5" fill="#534ab7" text-anchor="middle">Correlated returns shrink effective n further</text>
+<line x1="132" y1="161" x2="72" y2="161" stroke="#c0563b" stroke-width="1" marker-end="url(#fa)"/>
+<text x="68" y="165" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="11" fill="#b8472f" text-anchor="end">NO_EDGE</text>
+<line x1="340" y1="188" x2="340" y2="208" stroke="#6b665e" stroke-width="1.4" marker-end="url(#fa)"/>
+<rect x="148" y="212" width="384" height="54" rx="8" fill="#eeedfe" stroke="#afa9ec" stroke-width="0.8"/>
+<text x="340" y="235" font-family="ui-sans-serif,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="15" font-weight="700" fill="#26215c" text-anchor="middle">03 &middot; Market-adjusted excess</text>
+<text x="340" y="253" font-family="ui-sans-serif,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="12.5" fill="#534ab7" text-anchor="middle">Edge was just riding BTC &#8212; subtract market return</text>
+<line x1="148" y1="239" x2="72" y2="239" stroke="#c0563b" stroke-width="1" marker-end="url(#fa)"/>
+<text x="68" y="243" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="11" fill="#b8472f" text-anchor="end">NO_EDGE</text>
+<line x1="340" y1="266" x2="340" y2="286" stroke="#6b665e" stroke-width="1.4" marker-end="url(#fa)"/>
+<rect x="164" y="290" width="352" height="54" rx="8" fill="#eeedfe" stroke="#afa9ec" stroke-width="0.8"/>
+<text x="340" y="313" font-family="ui-sans-serif,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="15" font-weight="700" fill="#26215c" text-anchor="middle">04 &middot; Multiple-comparison control</text>
+<text x="340" y="331" font-family="ui-sans-serif,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="12.5" fill="#534ab7" text-anchor="middle">6 horizons tested &#8594; one will look good by chance</text>
+<line x1="164" y1="317" x2="72" y2="317" stroke="#c0563b" stroke-width="1" marker-end="url(#fa)"/>
+<text x="68" y="321" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="11" fill="#b8472f" text-anchor="end">NO_EDGE</text>
+<line x1="340" y1="344" x2="340" y2="364" stroke="#6b665e" stroke-width="1.4" marker-end="url(#fa)"/>
+<rect x="180" y="368" width="320" height="54" rx="8" fill="#eeedfe" stroke="#afa9ec" stroke-width="0.8"/>
+<text x="340" y="391" font-family="ui-sans-serif,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="15" font-weight="700" fill="#26215c" text-anchor="middle">05 &middot; Episode clustering</text>
+<text x="340" y="409" font-family="ui-sans-serif,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="12.5" fill="#534ab7" text-anchor="middle">785 firings &#8594; 35 episodes &#8594; n collapses</text>
+<line x1="180" y1="395" x2="72" y2="395" stroke="#c0563b" stroke-width="1" marker-end="url(#fa)"/>
+<text x="68" y="399" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="11" fill="#b8472f" text-anchor="end">NO_EDGE</text>
+<line x1="340" y1="422" x2="340" y2="446" stroke="#6b665e" stroke-width="1.4" marker-end="url(#fa)"/>
+<rect x="222" y="450" width="236" height="46" rx="8" fill="#e1f5ee" stroke="#5dcaa5" stroke-width="1"/>
+<text x="340" y="478" font-family="ui-sans-serif,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="17" font-weight="700" fill="#085041" text-anchor="middle">SURVIVES</text>
+<text x="340" y="514" font-family="ui-sans-serif,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="12.5" fill="#6b665e" text-anchor="middle">Passed all five &#8212; not falsified (yet)</text>
+<text x="340" y="530" font-family="ui-sans-serif,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="12.5" fill="#6b665e" text-anchor="middle">&#8800; edge proven</text>
+<line x1="120" y1="56" x2="180" y2="368" stroke="#9a948a" stroke-width="0.5" stroke-dasharray="3 3"/>
+<line x1="560" y1="56" x2="500" y2="368" stroke="#9a948a" stroke-width="0.5" stroke-dasharray="3 3"/>
+</svg>
         </div>
-        <div class="stage reveal">
-          <div class="num">02</div>
-          <div><h3>Autocorrelation correction</h3>
-            <p>Overlapping returns aren't independent; effective sample size shrinks and inflated t-stats deflate with it.</p></div>
-        </div>
-        <div class="stage reveal">
-          <div class="num">03</div>
-          <div><h3>Market-adjusted excess</h3>
-            <p>Strip out beta &mdash; an edge that was only riding the market's direction has nothing left.</p></div>
-        </div>
-        <div class="stage reveal">
-          <div class="num">04</div>
-          <div><h3>Multiple-comparison control</h3>
-            <p>Six cells means six shots at a false positive; Benjamini&ndash;Hochberg (M=6) raises the bar accordingly.</p></div>
-        </div>
-        <div class="stage reveal">
-          <div class="num">05</div>
-          <div><h3>Episode clustering</h3>
-            <p>A signal that fires for 13 hours straight is one event, not 156 samples &mdash; where most survivors finally die.</p></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- TWO VERDICTS + gate mini case -->
+      </figure>
+      <!-- TWO VERDICTS + gate mini case -->
   <section id="verdicts">
     <div class="wrap">
       <p class="eyebrow">two verdicts, both orthogonal to profit</p>
@@ -600,7 +615,7 @@
 <span class="pr">$</span> cd touchstone
 
 <span class="me"># start here &mdash; falsify a signal: {timestamp, price, signal}</span>
-<span class="pr">$</span> node src/index.mjs examples/perceptrade-frz/input.json --map signal=frZ
+<span class="pr">$</span> node src/index.mjs examples/perceptrade-frz/input.json --map price=btcPrice signal=frZ
 <span class="cm">&#8594;</span> signal_alpha: <span class="ne">NO_EDGE</span>
 
 <span class="cm"># then: a deliberately planted edge survives</span>
@@ -608,7 +623,7 @@
 <span class="cm">&#8594;</span> signal_alpha: <span class="sv">SURVIVES</span>
 
 <span class="cm"># finally: prove the harness's own power on the dead signal</span>
-<span class="pr">$</span> node src/index.mjs examples/perceptrade-frz/input.json --map signal=frZ --selfcheck
+<span class="pr">$</span> node src/index.mjs examples/perceptrade-frz/input.json --map price=btcPrice signal=frZ --selfcheck
 <span class="cm">&#8594;</span> selfcheck: <span class="sv">PASS</span>  <span class="cm"># first SURVIVES at &#945;=0.35</span></pre>
       </div>
 
