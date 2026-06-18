@@ -17,11 +17,12 @@ export function alphaVerdict(a) {
     cadence_snapshots_per_hour: a.sph,
     horizons_hours: a.horizonsHours,
     multiple_comparison: {
-      method: 'BH', M: a.multipleComparison.M,
+      method: 'BH', M: a.multipleComparison.M, min_episodes: a.multipleComparison.minEpisodes,
       bh_rejected: a.multipleComparison.bhRejected,
       bonferroni_survivors: a.multipleComparison.bonferroniSurvivors,
       min_p: round(a.multipleComparison.minP, 4),
       min_p_cell: a.multipleComparison.minPLabel,
+      underpowered_excluded: a.multipleComparison.underpoweredExcluded,
     },
     power: a.power.map(p => ({ n_episodes: p.nEpisodes, min_detectable_d: round(p.minDetectableD_corrected, 2) })),
     note: 'No detectable edge != no edge exists. This verdict is bounded by statistical power at the episode-level n above.',

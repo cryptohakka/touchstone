@@ -1,7 +1,7 @@
 {
   "tool": "touchstone",
   "version": "0.1.0",
-  "generated_at": "2026-06-18T05:00:16.709Z",
+  "generated_at": "2026-06-18T05:13:38.669Z",
   "headline": "signal: SURVIVES",
   "signal_alpha": {
     "axis": "signal_alpha",
@@ -25,46 +25,47 @@
     ],
     "multiple_comparison": {
       "method": "BH",
-      "M": 6,
+      "M": 5,
+      "min_episodes": 5,
       "bh_rejected": [
         "24h LOW-signal(z<=-TH)",
         "12h LOW-signal(z<=-TH)",
-        "24h HIGH-signal(z>=+TH)",
         "6h LOW-signal(z<=-TH)"
       ],
       "bonferroni_survivors": [
         "6h LOW-signal(z<=-TH)",
         "12h LOW-signal(z<=-TH)",
-        "24h HIGH-signal(z>=+TH)",
         "24h LOW-signal(z<=-TH)"
       ],
       "min_p": 0,
-      "min_p_cell": "24h LOW-signal(z<=-TH)"
+      "min_p_cell": "24h LOW-signal(z<=-TH)",
+      "underpowered_excluded": [
+        {
+          "label": "24h HIGH-signal(z>=+TH)",
+          "nEpisodes": 2
+        }
+      ]
     },
     "power": [
       {
-        "n_episodes": 2,
-        "min_detectable_d": 2.46
-      },
-      {
         "n_episodes": 8,
-        "min_detectable_d": 1.23
+        "min_detectable_d": 1.21
       },
       {
         "n_episodes": 14,
-        "min_detectable_d": 0.93
+        "min_detectable_d": 0.91
       },
       {
         "n_episodes": 16,
-        "min_detectable_d": 0.87
+        "min_detectable_d": 0.85
       },
       {
         "n_episodes": 17,
-        "min_detectable_d": 0.84
+        "min_detectable_d": 0.83
       },
       {
         "n_episodes": 19,
-        "min_detectable_d": 0.8
+        "min_detectable_d": 0.78
       }
     ],
     "note": "No detectable edge != no edge exists. This verdict is bounded by statistical power at the episode-level n above."

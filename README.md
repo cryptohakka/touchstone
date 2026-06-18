@@ -102,9 +102,11 @@ Then map your column names as usual: `--map time=time price=close signal=rsi`.
     "verdict": "NO_EDGE",            // no cell survived multiple-comparison correction
     "n_episodes": 35,                 // autocorrelated firings collapsed to 35 independent episodes
     "multiple_comparison": {
-      "method": "BH", "M": 6,         // 6 cells tested (3 horizons x 2 sides)
+      "method": "BH", "M": 6,         // 6 cells tested (3 horizons x 2 sides), all >= min_episodes
+      "min_episodes": 5,              // cells with fewer independent episodes are excluded
       "bh_rejected": [],              // survivors after Benjamini-Hochberg
-      "min_p": 0.0897                 // best raw p-value; > BH threshold 0.00833 -> dies
+      "min_p": 0.0897,                // best raw p-value; > BH threshold 0.00833 -> dies
+      "underpowered_excluded": []     // [{ label, nEpisodes }] for any cell dropped by the guard
     },
     "power": [{ "n_episodes": 13, "min_detectable_d": 0.97 }],  // NO_EDGE is bounded by this
     "note": "No detectable edge != no edge exists."
@@ -134,7 +136,12 @@ honesty of a `NO_EDGE`: at this episode count the smallest reliably-detectable e
    This is where t-stats inflated by autocorrelation die: on the subject signal the
    strongest cell's naive |t|≈4.9 collapses to episode |t|<2, and three of the six cells
    flip sign once each event is counted once instead of once per 5-minute firing.
-4. **Multiple comparison** (Benjamini-Hochberg + Bonferroni) across all horizon×side cells.
+4. **Multiple comparison** (Benjamini-Hochberg + Bonferroni) across all horizon×side cells
+   that survive a minimum-episode guard: cells left with fewer than `--min-episodes` (default
+   5) independent episodes are excluded from testing — a truncated horizon reduced to a
+   couple of episodes can fire an explosive t-stat off near-zero variance, and the harness
+   refuses to vote on its own degenerate cells. Excluded cells are still reported, under
+   `underpowered_excluded`.
 5. **Power** — report the minimum detectable effect at the episode-level n, so `NO_EDGE`
    is bounded rather than overclaimed.
 
@@ -210,7 +217,7 @@ node src/index.mjs data.json --map price=close signal=rsi --standardize \
 ## All flags
 
 See `node src/index.mjs --help` for the canonical list with examples. Summary:
-`--map`, `--standardize`, `--threshold`, `--horizons`, `--gap`, `--sph`, `--gate`,
+`--map`, `--standardize`, `--threshold`, `--horizons`, `--gap`, `--min-episodes`, `--sph`, `--gate`,
 `--selfcheck`, `--leak-horizon`, `--seed`, `--diag`, `--json`.
 
 ## Machine-readable spec
@@ -226,7 +233,7 @@ with non-finite mapped values are dropped. Minimum 30 usable rows.
 `entry_time|entryTime|opened_at|openedAt|entry_ts|timestamp|time|ts`.
 
 **Verdict output** (default mode) — object with:
-`headline: string`, `signal_alpha: { verdict: "NO_EDGE"|"SURVIVES", n_snapshots, n_episodes, threshold, cadence_snapshots_per_hour, horizons_hours, multiple_comparison: { method, M, bh_rejected: string[], bonferroni_survivors: string[], min_p, min_p_cell }, power: [{ n_episodes, min_detectable_d }], note }`,
+`headline: string`, `signal_alpha: { verdict: "NO_EDGE"|"SURVIVES", n_snapshots, n_episodes, threshold, cadence_snapshots_per_hour, horizons_hours, multiple_comparison: { method, M, min_episodes, bh_rejected: string[], bonferroni_survivors: string[], min_p, min_p_cell, underpowered_excluded: [{ label, nEpisodes }] }, power: [{ n_episodes, min_detectable_d }], note }`,
 `gate_selectivity: null | { verdict: "SELECTIVE"|"NOT_SELECTIVE", horizon_min, execution, n_blocks, basis_used: "recomputed"|"recorded", mapped_coverage, coverage_warning, firing_pool: { size, gate_mean, random_mean, percentile }, all_pool, note }`,
 `disclaimer: string`.
 

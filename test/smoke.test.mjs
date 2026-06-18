@@ -46,3 +46,12 @@ test('self-check on noise: detection curve rises, both nulls pass', () => {
   assert.ok(sc.summary.direction_invariant, 'sign-flip should leave min_p unchanged');
   assert.strictEqual(sc.detection_power.first_survive_alpha, 0.2, 'documented synthetic leak-detection point');
 });
+
+test('min-episode guard excludes underpowered cells from testing', () => {
+  const a = runAlpha(leak(), { sph: SPH, minEpisodes: 9999 });
+  assert.strictEqual(a.multipleComparison.M, 0, 'all cells excluded at an impossibly high min');
+  assert.strictEqual(a.multipleComparison.bhRejected.length, 0, 'nothing can survive when nothing is tested');
+  assert.strictEqual(a.multipleComparison.underpoweredExcluded.length, a.cells.length, 'every cell is reported as excluded');
+  // default min keeps the well-populated cells, so the planted leak still SURVIVES
+  assert.ok(runAlpha(leak(), { sph: SPH }).multipleComparison.bhRejected.length > 0, 'guard does not suppress a real edge at default min');
+});

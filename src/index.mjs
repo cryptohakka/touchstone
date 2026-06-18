@@ -41,6 +41,7 @@ OPTIONS
   --threshold N        firing threshold on the signal (default 1.5; HIGH: z>=+N, LOW: z<=-N)
   --horizons a,b,c     forward-return horizons in hours (default 6,12,24)
   --gap N              max snapshot gap to merge consecutive firings into one episode (default 2)
+  --min-episodes N     exclude cells with fewer than N independent episodes from testing (default 5)
   --sph N              snapshots per hour (default: inferred from median dt; set for parity)
   --gate <file>        also run the Gate Selectivity Test on a block/skip decision log
   --gate-map k=field   map decision-log keys: resolved=, side=, pnl= (e.g. resolved=blocked side=dir pnl=pnl_pct)
@@ -97,6 +98,7 @@ const horizons = (typeof opts.horizons === 'string' ? opts.horizons : '6,12,24')
 if (opts.selfcheck) {
   const sc = runSelfCheck(series, {
     sph, threshold, horizons, gap: opts.gap != null ? Number(opts.gap) : 2,
+    minEpisodes: opts['min-episodes'] != null ? Number(opts['min-episodes']) : undefined,
     leakHorizon: opts['leak-horizon'] != null ? Number(opts['leak-horizon']) : 24,
     seed: opts.seed != null ? Number(opts.seed) : undefined,
   });
@@ -114,7 +116,7 @@ if (opts.selfcheck) {
   process.exit(0);
 }
 
-const alpha = runAlpha(series, { threshold, horizons, gap: opts.gap != null ? Number(opts.gap) : 2, sph });
+const alpha = runAlpha(series, { threshold, horizons, gap: opts.gap != null ? Number(opts.gap) : 2, minEpisodes: opts['min-episodes'] != null ? Number(opts['min-episodes']) : undefined, sph });
 const av = alphaVerdict(alpha);
 
 let gv = null;
@@ -131,8 +133,9 @@ const out = combined(av, gv);
 // ---- human summary ----
 console.error(`loaded ${series.length} rows | ${alpha.window.from} -> ${alpha.window.to} | cadence ~${cad.dtMin}min -> sph=${sph} | TH=${threshold}`);
 console.error(`episodes: ${alpha.episodes} (high=${alpha.episodesBySide.high}, low=${alpha.episodesBySide.low})`);
-for (const c of alpha.cells) console.error(`  ${c.label}: episode t=${c.tEpisode.toFixed(2)} (nEp=${c.nEpisodes}) p=${c.p.toFixed(4)} | edge=${c.meanEpisodePct.toFixed(3)}%`);
-console.error(`multiple comparison (M=${alpha.multipleComparison.M}): BH rejects ${alpha.multipleComparison.bhRejected.length} | min p=${alpha.multipleComparison.minP?.toFixed(4)} (${alpha.multipleComparison.minPLabel})`);
+for (const c of alpha.cells) console.error(`  ${c.label}: episode t=${c.tEpisode.toFixed(2)} (nEp=${c.nEpisodes}) p=${c.p.toFixed(4)} | edge=${c.meanEpisodePct.toFixed(3)}%${c.tested ? '' : `  [excluded: nEp<${alpha.minEpisodes}]`}`);
+const nExcl = alpha.multipleComparison.underpoweredExcluded.length;
+console.error(`multiple comparison (M=${alpha.multipleComparison.M}${nExcl ? `, ${nExcl} excluded nEp<${alpha.minEpisodes}` : ''}): BH rejects ${alpha.multipleComparison.bhRejected.length} | min p=${alpha.multipleComparison.minP?.toFixed(4)} (${alpha.multipleComparison.minPLabel})`);
 console.error(`SIGNAL ALPHA -> ${av.verdict}`);
 if (gv) {
   console.error(`gate: ${gv.n_blocks} blocks | basis=${gv.basis_used}${gv.coverage_warning ? ' (WARN coverage<90%)' : ''}`);

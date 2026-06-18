@@ -10,6 +10,7 @@ export function runAlpha(series, opts = {}) {
   const TH = opts.threshold ?? 1.5;
   const HS = opts.horizons ?? [6, 12, 24];   // in HOURS
   const GAP = opts.gap ?? 2;
+  const MIN_EP = opts.minEpisodes ?? 5;       // cells with fewer independent episodes are excluded from testing
   const SPH = opts.sph;                       // snapshots/hour, from adapter.inferCadence
   if (!Number.isFinite(SPH) || SPH < 1) throw new Error('runAlpha: sph (snapshots per hour) must be a positive integer');
   const s = series, n = s.length;
@@ -38,15 +39,21 @@ export function runAlpha(series, opts = {}) {
       const ep = [];
       for (const e of EP) { if (e.sign !== side) continue; const rs = e.idx.map(i => fwd(i, H)).filter(r => r != null); if (rs.length) ep.push(mean(rs) - beta); }
       const tNaive = tt(fire), tEpisode = tt(ep), df = ep.length - 1, p = pt2(tEpisode, df);
-      cells.push({ label, horizon: H, side, tNaive, tEpisode, df, p, meanEpisodePct: mean(ep) * 100, nEpisodes: ep.length, nFirings: fire.length });
+      cells.push({ label, horizon: H, side, tNaive, tEpisode, df, p, meanEpisodePct: mean(ep) * 100, nEpisodes: ep.length, nFirings: fire.length, tested: ep.length >= MIN_EP });
     }
   }
 
-  const M = cells.length, bonf = 0.05 / M;
-  const sorted = [...cells].sort((a, b) => a.p - b.p);
+  // Only cells with >= MIN_EP independent episodes enter multiple-comparison and the
+  // verdict. A horizon truncated to a handful of episodes (e.g. a 24h cell left with 2)
+  // can yield an explosive t-stat off near-zero variance; excluding it stops the harness
+  // from voting on its own degenerate false positives. Excluded cells are still reported.
+  const tested = cells.filter(c => c.tested);
+  const underpowered = cells.filter(c => !c.tested);
+  const M = tested.length, bonf = M > 0 ? 0.05 / M : Infinity;
+  const sorted = [...tested].sort((a, b) => a.p - b.p);
   let bh = 0; for (let k = 0; k < sorted.length; k++) { if (sorted[k].p <= 0.05 * (k + 1) / M) bh = k + 1; }
 
-  const nEps = [...new Set(cells.map(c => c.nEpisodes))].sort((a, b) => a - b);
+  const nEps = [...new Set(tested.map(c => c.nEpisodes))].sort((a, b) => a - b);
   const power = nEps.map(nn => ({
     nEpisodes: nn,
     minDetectableD_corrected: (zq(1 - bonf / 2) + zq(0.8)) / Math.sqrt(nn),
@@ -56,15 +63,16 @@ export function runAlpha(series, opts = {}) {
   return {
     nSnapshots: n,
     window: { from: new Date(s[0].t).toISOString(), to: new Date(s[n - 1].t).toISOString() },
-    threshold: TH, horizonsHours: HS, gap: GAP, sph: SPH,
+    threshold: TH, horizonsHours: HS, gap: GAP, sph: SPH, minEpisodes: MIN_EP,
     episodes: EP.length,
     episodesBySide: { high: EP.filter(e => e.sign > 0).length, low: EP.filter(e => e.sign < 0).length },
     cells,
     multipleComparison: {
-      M, bonferroniAlpha: bonf,
-      bonferroniSurvivors: cells.filter(c => c.p < bonf).map(c => c.label),
+      M, minEpisodes: MIN_EP, bonferroniAlpha: bonf,
+      bonferroniSurvivors: tested.filter(c => c.p < bonf).map(c => c.label),
       bhRejected: sorted.slice(0, bh).map(c => c.label),
       minP: sorted[0]?.p, minPLabel: sorted[0]?.label,
+      underpoweredExcluded: underpowered.map(c => ({ label: c.label, nEpisodes: c.nEpisodes })),
     },
     power,
   };

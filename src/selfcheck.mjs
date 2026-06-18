@@ -46,7 +46,7 @@ export function runSelfCheck(series, opts = {}) {
   const H = opts.leakHorizon ?? 24;
   const alphas = opts.alphas ?? [0, 0.05, 0.1, 0.2, 0.35, 0.5, 0.75, 1.0];
   const n = series.length;
-  const base = { threshold: TH, horizons, gap, sph };
+  const base = { threshold: TH, horizons, gap, sph, minEpisodes: opts.minEpisodes };
 
   const run = zArr => {
     const s2 = series.map((s, i) => ({ t: s.t, p: s.p, z: zArr[i] }));

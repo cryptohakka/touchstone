@@ -1,7 +1,7 @@
 {
   "tool": "touchstone",
   "version": "0.1.0",
-  "generated_at": "2026-06-17T16:17:09.638Z",
+  "generated_at": "2026-06-18T05:13:38.596Z",
   "headline": "signal: NO_EDGE | gate: NOT_SELECTIVE",
   "signal_alpha": {
     "axis": "signal_alpha",
@@ -26,10 +26,12 @@
     "multiple_comparison": {
       "method": "BH",
       "M": 6,
+      "min_episodes": 5,
       "bh_rejected": [],
       "bonferroni_survivors": [],
       "min_p": 0.0897,
-      "min_p_cell": "6h HIGH-signal(z>=+TH)"
+      "min_p_cell": "6h HIGH-signal(z>=+TH)",
+      "underpowered_excluded": []
     },
     "power": [
       {
@@ -62,12 +64,12 @@
     "firing_pool": {
       "size": 785,
       "gate_mean": -0.3074,
-      "random_mean": -0.2477,
-      "percentile": 13.8
+      "random_mean": -0.2487,
+      "percentile": 14.7
     },
     "all_pool": {
       "size": 3115,
-      "percentile": 6
+      "percentile": 5.8
     },
     "note": "Gate selectivity is orthogonal to PnL. SELECTIVE means the gate rejects worse-than-random trades from the firing population; it does NOT mean the system is profitable."
   },

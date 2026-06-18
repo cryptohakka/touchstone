@@ -2,7 +2,7 @@
   "tool": "touchstone",
   "mode": "selfcheck",
   "version": "0.1.0",
-  "generated_at": "2026-06-17T16:39:55.956Z",
+  "generated_at": "2026-06-18T05:13:38.844Z",
   "config": {
     "leak_horizon_h": 24,
     "alpha_grid": [
