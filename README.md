@@ -19,18 +19,24 @@ system.
 
 ## 30-second quickstart
 
-No dependencies. Node 18+. Nothing to configure; the bundled example runs out of the box.
+No dependencies. Node 18+. Nothing to configure; the bundled examples run out of the box.
 
 ```bash
 git clone https://github.com/cryptohakka/touchstone
 cd touchstone
-node src/index.mjs examples/synthetic-leak/input.json --map price=btcPrice signal=frZ
+
+# the falsification case — the author's own funding-rate signal → NO_EDGE
+node src/index.mjs examples/perceptrade-frz/input.json --map price=btcPrice signal=frZ
+
+# the positive control — a synthetic signal with a planted edge → SURVIVES
+node src/index.mjs examples/synthetic-leak/input.json
 ```
 
-The bundled example is a *synthetic signal with a planted edge* — it proves the harness
-works (returns `SURVIVES`). The real subject, `examples/perceptrade-frz/`, is the signal
-touchstone **kills** (`NO_EDGE`); see "Self-validation" and "Subject #1" below. Synthetic =
-proof of operation; perceptrade-frz = the falsification case.
+The first command runs touchstone on its own subject #1 and reports `NO_EDGE` — the
+falsification case the whole tool is built around. The second is a *synthetic signal with a
+planted edge*; it returns `SURVIVES`, proving the harness is not a timid always-veto but
+detects real edge when it's there. perceptrade-frz = the falsification case; synthetic =
+proof of operation. See "Self-validation" and "Subject #1" below.
 
 You'll get a human summary on stderr and a verdict JSON on stdout. `node --test` runs a
 deterministic, seeded test suite. `node src/index.mjs --help` is a complete reference.

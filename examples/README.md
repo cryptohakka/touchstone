@@ -23,8 +23,9 @@ node ../../src/index.mjs input.json --map price=btcPrice signal=frZ \
 ## synthetic-leak (positive control)
 
 A signal built from a planted future-return leak — shows the harness detects real edge
-(expected: SURVIVES). Demonstrates the tool is not trivially always-NO_EDGE.
+(expected: SURVIVES). Demonstrates the tool is not trivially always-NO_EDGE. Uses the
+default `timestamp` / `price` / `signal` field names, so no `--map` is needed.
 
 ```bash
-node ../../src/index.mjs input.json --map price=btcPrice signal=frZ --json output.json
+node ../../src/index.mjs input.json --json output.json
 ```
