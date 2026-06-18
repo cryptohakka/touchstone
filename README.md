@@ -1,19 +1,21 @@
 # touchstone
 
-A falsification harness for trading signals — **strategy evaluation & benchmarking**.
+A falsification harness for trading signals **and the agents that act on them** — *strategy evaluation, benchmarking, and decision audit.*
 
 Touchstone takes any scalar signal aligned to a price series and tries to **kill** the
 claim that it has an edge. It emits a machine-readable verdict — `SURVIVES` or
 `NO_EDGE` — after a five-stage pipeline that most backtests skip. It does the same to a
-gate/filter's block decisions (the *Gate Selectivity Test*): `SELECTIVE` or
-`NOT_SELECTIVE`.
+**decision layer** — an LLM council, a rule-based filter, or a hybrid gate — and asks
+whether its vetoes actually remove worse-than-random trades or just add latency and burn
+tokens (the *Gate Selectivity Test*): `SELECTIVE` or `NOT_SELECTIVE`.
 
 It is honest by construction: both axes are **orthogonal to PnL**, and the tool says so
 in every output. A passing verdict is *necessary, not sufficient* for a profitable
 system.
 
 > Subject #1 is the author's own funding-rate strategy (`examples/perceptrade-frz/`),
-> which touchstone reports as `NO_EDGE`. The first thing it kills is its maker's.
+> driven by an LLM council; touchstone reports it `NO_EDGE` with a `NOT_SELECTIVE` gate.
+> The first thing it kills is its maker's.
 
 ---
 
@@ -46,7 +48,7 @@ deterministic, seeded test suite. `node src/index.mjs --help` is a complete refe
 | axis | question | verdict | needs |
 |------|----------|---------|-------|
 | signal alpha | does this signal have edge that survives correction? | `NO_EDGE` / `SURVIVES` | price+signal series |
-| gate selectivity | does this filter block worse-than-random trades, or just randomly? | `NOT_SELECTIVE` / `SELECTIVE` | + a block decision log |
+| gate selectivity | does this agent's veto layer block worse-than-random trades, or just randomly? | `NOT_SELECTIVE` / `SELECTIVE` | + a block/veto decision log |
 
 Both are orthogonal to realized PnL.
 
@@ -176,7 +178,17 @@ have it.
 
 *Detection-power curve. Injecting a graded future-return leak into the dead frZ signal drives `min_p` below the BH threshold at **α=0.35** (Spearman −0.81) — the harness detects real edge rather than always vetoing.*
 
-## The Gate Selectivity Test
+## The Gate Selectivity Test — auditing a decision layer
+
+Your LLM council vetoes trades. Your rule-based filter blocks signals. Are those vetoes
+actually removing worse-than-random trades, or just adding latency and burning tokens? The
+Gate Selectivity Test answers this for any decision producer — LLM, rule-based, or hybrid —
+whose accept/reject calls can be logged:
+
+- LLM-driven councils (Architect/Auditor/Arbiter, a single-LLM gate, ensemble votes)
+- rule-based filters (volatility gates, drawdown caps, momentum checks)
+- hybrid gates (LLM + heuristic)
+- any decision producer that emits accept/reject per signal firing
 
 Given a log of trades a gate *blocked*, touchstone bootstraps random blocks from the same
 firing population and asks whether the gate's blocked set is significantly worse-than-random.
