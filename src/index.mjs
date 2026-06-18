@@ -50,7 +50,7 @@ OPTIONS
   --fee N              gate round-trip fee in % (default 0.24 = 0.06% maker+taker, x2 legs, x2 lev)
   --selfcheck          validate the harness on this data (leak-injection + nulls); no gate needed
   --leak-horizon N     hours of future leak to inject in --selfcheck (default 24)
-  --seed N             RNG seed for reproducible nulls (default 12345)
+  --seed N             RNG seed for reproducible nulls and the gate bootstrap (default 12345)
   --diag               also report the legacy side-assignment baseline (reproduces a prior bug)
   --json <file>        write the verdict JSON to a file instead of stdout
   --help, -h           show this help
@@ -124,7 +124,7 @@ if (opts.gate) {
   const gateMap = parseMap(opts['gate-map']); // reuse k=field parser
   const blocks = loadDecisionLog(opts.gate, { pnlField: typeof opts['pnl-field'] === 'string' ? opts['pnl-field'] : undefined, gateMap });
   if (!blocks.length) { console.error(`no resolved blocks found in ${opts.gate} — check --gate-map (resolved/side/pnl keys) and --pnl-field`); process.exit(1); }
-  const gate = runGate(series, blocks, { threshold, diag: !!opts.diag, fee: opts.fee != null ? Number(opts.fee) : undefined, lev: opts.leverage != null ? Number(opts.leverage) : undefined });
+  const gate = runGate(series, blocks, { threshold, diag: !!opts.diag, fee: opts.fee != null ? Number(opts.fee) : undefined, lev: opts.leverage != null ? Number(opts.leverage) : undefined, seed: opts.seed != null ? Number(opts.seed) : undefined });
   gv = gateVerdict(gate);
 }
 

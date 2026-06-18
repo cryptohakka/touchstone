@@ -6,6 +6,7 @@ import assert from 'node:assert';
 import { inferCadence } from '../src/adapter.mjs';
 import { runAlpha } from '../src/engine.mjs';
 import { runSelfCheck } from '../src/selfcheck.mjs';
+import { runGate } from '../src/gate.mjs';
 
 const N = 2000, start = Date.parse('2026-06-06T00:00:00Z'), step = 5 * 60 * 1000, SPH = 12, H = 24;
 
@@ -54,4 +55,16 @@ test('min-episode guard excludes underpowered cells from testing', () => {
   assert.strictEqual(a.multipleComparison.underpoweredExcluded.length, a.cells.length, 'every cell is reported as excluded');
   // default min keeps the well-populated cells, so the planted leak still SURVIVES
   assert.ok(runAlpha(leak(), { sph: SPH }).multipleComparison.bhRejected.length > 0, 'guard does not suppress a real edge at default min');
+});
+
+test('gate bootstrap is deterministic under a fixed seed', () => {
+  const s = noise();
+  const blocks = [];
+  for (let i = 0; i < s.length && blocks.length < 40; i++) {
+    if (Math.abs(s[i].z) >= 1.5) blocks.push({ recordedPnl: 0, entryMs: s[i].t, side: s[i].z >= 0 ? 'short' : 'long' });
+  }
+  const a = runGate(s, blocks, { seed: 7 });
+  const b = runGate(s, blocks, { seed: 7 });
+  assert.strictEqual(a.poolB.percentile, b.poolB.percentile, 'same seed -> identical percentile');
+  assert.strictEqual(a.poolB.randomMean, b.poolB.randomMean, 'same seed -> identical random baseline');
 });

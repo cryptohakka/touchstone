@@ -208,7 +208,7 @@ overfitting-detection family below tests the gate layer — this axis is specifi
 
 The gate's PnL uses an execution model: default **leverage 2** and **round-trip fee 0.24%**
 (0.06% maker+taker, two legs, at 2x). Override with `--leverage` and `--fee`; both the gate's
-actual mean and the random baseline use the same values, so the verdict is fee-symmetric.
+actual mean and the random baseline use the same values, so the verdict is fee-symmetric. The bootstrap is seeded (`--seed`, default 12345), so the firing-pool percentile is reproducible across runs.
 
 Decision-log format: any array of resolved records carrying a pnl field, an optional
 `side`, and an entry timestamp (`entry_time` / `entryTime` / `opened_at` / … auto-detected):

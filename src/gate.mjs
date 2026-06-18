@@ -15,6 +15,9 @@ export function runGate(series, blocks, opts = {}) {
   const FEE = opts.fee ?? (0.0006 + 0.0006) * LEV * 100;
   const TH = opts.threshold ?? 1.5;
   const B = opts.B ?? 10000;
+  const SEED = ((opts.seed ?? 12345) >>> 0) || 1;
+  let _rs = SEED;
+  const rng = () => { _rs |= 0; _rs = _rs + 0x6D2B79F5 | 0; let t = Math.imul(_rs ^ _rs >>> 15, 1 | _rs); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
   // signal -> intended side. Default = sign-based contrarian (frZ semantics).
   // Override for non-contrarian or non-centered signals.
   const sideOf = opts.sideRule ?? (z => z >= 0 ? 'short' : 'long');
@@ -57,7 +60,7 @@ export function runGate(series, blocks, opts = {}) {
     for (let b = 0; b < B; b++) {
       const picks = [];
       for (let k = 0; k < K; k++) {
-        const idx = pool[Math.floor(Math.random() * pool.length)];
+        const idx = pool[Math.floor(rng() * pool.length)];
         const r = pnlAt(idx, sideFn(idx, k));
         if (r == null) { k--; continue; }
         picks.push(r);

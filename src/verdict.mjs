@@ -41,7 +41,7 @@ export function gateVerdict(g) {
     coverage_warning: g.coverageWarning,
     firing_pool: { size: g.poolB.size, gate_mean: round(g.poolB.councilMean, 4), random_mean: round(g.poolB.randomMean, 4), percentile: round(g.poolB.percentile * 100, 1) },
     all_pool: { size: g.poolA.size, percentile: round(g.poolA.percentile * 100, 1) },
-    note: 'Gate selectivity is orthogonal to PnL. SELECTIVE means the gate rejects worse-than-random trades from the firing population; it does NOT mean the system is profitable.',
+    note: 'Gate selectivity is orthogonal to PnL. SELECTIVE means the gate rejects worse-than-random trades from the firing population; NOT_SELECTIVE means its blocks are statistically indistinguishable from random selection within that population — including any LLM or compute cost spent to produce them. Neither verdict implies the system is profitable.',
   };
 }
 
