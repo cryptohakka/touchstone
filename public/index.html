@@ -143,7 +143,13 @@
   .axis .pair{margin:14px 0 0;font-family:var(--mono);font-size:15px;font-weight:700}
   .axis .pair .sep{color:var(--mute);font-weight:400;margin:0 8px}
   .axis p{margin:14px 0 0;font-size:15px;color:var(--gray);line-height:1.55}
-  .orthogonal{
+  .axis .res{margin:16px 0 0;display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding-top:14px;border-top:1px dashed var(--hair)}
+  .axis .res .rl{font-family:var(--mono);font-size:12px;color:var(--mute)}
+  .axis .res .rv{font-family:var(--mono);font-size:13px;font-weight:700}
+  .axis .res .rv.dead{color:var(--dead-deep)}
+  .axis .res .seehere{font-family:var(--mono);font-size:11.5px;color:var(--gray);text-decoration:none;margin-left:auto;border-bottom:1px solid var(--hair)}
+  .axis .res .seehere:hover{color:var(--ink)}
+    .orthogonal{
     margin-top:24px;font-family:var(--mono);font-size:13px;color:var(--mute);
     display:flex;gap:10px;align-items:flex-start;
   }
@@ -509,20 +515,22 @@
   <!-- TWO VERDICTS + gate mini case -->
   <section id="verdicts">
     <div class="wrap">
-      <p class="eyebrow">two verdicts, both orthogonal to profit</p>
-      <h2>Falsify the signal &mdash; and the layer that acts on it</h2>
-      <p class="sub">touchstone doesn't tell you whether a strategy makes money. It tells you whether there's anything real underneath it, on two independent axes.</p>
+      <p class="eyebrow">two axes, both orthogonal to profit</p>
+      <h2>touchstone falsifies on two separate axes</h2>
+      <p class="sub">It never tells you whether a strategy makes money. It asks two independent questions: is the <em>signal</em> real, and is the <em>layer</em> that acts on it actually selective? A thing can pass one and fail the other. Each axis has its own worked example below.</p>
 
       <div class="axes">
         <div class="axis reveal">
           <div class="name">signal_alpha</div>
           <div class="pair"><span style="color:var(--dead-deep)">NO_EDGE</span><span class="sep">/</span><span style="color:var(--live)">SURVIVES</span></div>
-          <p>Does the signal still predict forward returns after all five stages? Most don't &mdash; including frZ above.</p>
+          <p>Does the signal still predict forward returns after all five stages? Most don't.</p>
+          <div class="res"><span class="rl">worked example</span><span class="rv dead">frZ &#8594; NO_EDGE</span><a class="seehere" href="#case">see case study &#8593;</a></div>
         </div>
         <div class="axis reveal">
           <div class="name">gate_selectivity</div>
           <div class="pair"><span style="color:var(--dead-deep)">NOT_SELECTIVE</span><span class="sep">/</span><span style="color:var(--live)">SELECTIVE</span></div>
           <p>Does a blocking layer &mdash; an LLM council, a rule gate, a hybrid &mdash; reject worse-than-random opportunities? Or is its veto a coin flip in disguise?</p>
+          <div class="res"><span class="rl">worked example</span><span class="rv dead">council &#8594; NOT_SELECTIVE</span><a class="seehere" href="#verdicts">see below &#8595;</a></div>
         </div>
       </div>
 
