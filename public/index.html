@@ -210,9 +210,50 @@
     .reveal{opacity:1;transform:none;transition:none}
     .bar{backdrop-filter:none}
   }
+
+  /* --- case study result strip --- */
+  .cs-hook{font-size:19px;line-height:1.5;margin:16px 0 0;max-width:56ch;color:var(--ink)}
+  .cs-hook b{font-weight:700}
+  .result{margin:28px 0 0;border:1px solid var(--hair);border-radius:12px;background:var(--panel);overflow:hidden}
+  .result .grid3{display:grid;grid-template-columns:1fr 1fr 1fr}
+  @media(max-width:680px){.result .grid3{grid-template-columns:1fr}}
+  .metric{padding:20px 22px;border-right:1px solid var(--hair)}
+  .metric:last-child{border-right:0}
+  @media(max-width:680px){.metric{border-right:0;border-bottom:1px solid var(--hair)}.metric:last-child{border-bottom:0}}
+  .metric .ml{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+  .metric .mv{font-family:var(--mono);font-size:21px;font-weight:700;margin-top:9px;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+  .metric .mv .from{color:var(--dead-deep)}
+  .metric .mv .arr{color:var(--mute);font-weight:400}
+  .metric .mv .to{color:var(--live)}
+  .metric .mv .plain{color:var(--ink)}
+  .verdictbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 22px;border-top:1px solid var(--hair);background:#efece4}
+  .verdictbar .lbl{font-family:var(--mono);font-size:12px;color:var(--gray);letter-spacing:.04em}
+  .verdictbar .stamp{font-family:var(--mono);font-size:19px;font-weight:700;letter-spacing:.05em;color:var(--dead-deep);border:1.5px solid var(--dead);border-radius:7px;padding:5px 13px;transform:rotate(-1.6deg)}
+
+  /* --- punch line under hero --- */
+  .punch{font-size:clamp(18px,2.3vw,22px);font-weight:700;letter-spacing:-.008em;line-height:1.24;color:var(--ink);margin:26px 0 0;max-width:26ch}
+  .punch .em{color:var(--dead-deep)}
+
+  /* --- gate mini case --- */
+  .gatecase{margin-top:28px;border:1px solid var(--hair);border-radius:10px;overflow:hidden}
+  .gatecase .gtitle{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);padding:13px 18px;border-bottom:1px solid var(--hair);background:var(--panel)}
+  .grow{display:flex;align-items:center;gap:14px;padding:15px 18px;border-bottom:1px solid var(--hair)}
+  .grow:last-child{border-bottom:0}
+  .grow .who{font-family:var(--mono);font-size:13.5px;color:var(--ink);min-width:230px}
+  .grow .who .sm{color:var(--mute);font-size:12px}
+  .grow .pct{font-family:var(--mono);font-size:12.5px;color:var(--gray)}
+  .grow .gv{margin-left:auto;font-family:var(--mono);font-weight:700;font-size:13.5px;white-space:nowrap}
+  .grow .gv.dead{color:var(--dead-deep)}
+  .grow .gv.live{color:var(--live)}
+  @media(max-width:560px){.grow{flex-wrap:wrap;gap:5px}.grow .who{min-width:0;width:100%}.grow .gv{margin-left:0}}
+
+  /* --- start here --- */
+  .starthere{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--live);margin:0 0 14px}
+  .starthere::before{content:"";width:7px;height:7px;border-radius:999px;background:var(--live)}
+  .qs pre .me{color:var(--gray)}
+
 </style>
 </head>
-<body>
 
 <header class="bar">
   <div class="wrap">
@@ -231,9 +272,9 @@
       <span>touchstone<span class="dot">.</span></span>
     </span>
     <nav>
-      <a href="#axes">verdicts</a>
-      <a href="#gauntlet">gauntlet</a>
-      <a href="#evidence">evidence</a>
+      <a href="#case">case study</a>
+      <a href="#why">why</a>
+      <a href="#verdicts">verdicts</a>
       <a class="repo" href="https://github.com/cryptohakka/touchstone">repo &#8599;</a>
     </nav>
   </div>
@@ -243,9 +284,11 @@
 
   <!-- HERO -->
   <div class="wrap hero">
-    <p class="eyebrow">falsification harness &#183; zero-dependency &#183; node 18+</p>
+    <p class="eyebrow">ai-agent falsification harness &#183; zero-dependency &#183; node 18+</p>
     <h1 class="reveal">Most backtested edge is a measurement artifact.</h1>
-    <p class="lede reveal">touchstone runs any trading signal through a five-stage statistical gauntlet and returns one machine-readable verdict &mdash; before you wire a model to capital.</p>
+    <p class="lede reveal">touchstone falsifies the signals your agents trade on &mdash; including the ones an LLM produces. Feed it any signal; it runs a five-stage statistical gauntlet and returns one machine-readable verdict, before you let a model act on capital.</p>
+
+    <p class="punch reveal">Every strategy looks smart <span class="em">before episode collapse.</span></p>
 
     <div class="readout reveal" aria-label="Example verdict for the frZ signal">
       <div class="cmd"><span class="pr">$</span> node src/index.mjs examples/perceptrade-frz/input.json --map signal=frZ --gate &hellip; --selfcheck</div>
@@ -268,93 +311,44 @@
       </div>
     </div>
 
-    <p class="hook reveal">That is my own live trading signal. <b>The first thing the harness killed was its maker's.</b></p>
-
     <div class="tags reveal">
-      <span class="tag">no dependencies</span>
+      <span class="tag">falsifies any scalar signal</span>
+      <span class="tag">audits LLM / rule decision layers</span>
       <span class="tag">offline &amp; deterministic</span>
-      <span class="tag">signal-agnostic</span>
       <span class="tag">MIT</span>
     </div>
   </div>
 
-  <!-- TWO AXES -->
-  <section id="axes">
+  <!-- CASE STUDY: result first -->
+  <section id="case">
     <div class="wrap">
-      <p class="eyebrow">what it answers</p>
-      <h2>Two verdicts, both orthogonal to profit</h2>
-      <p class="sub">touchstone does not tell you whether a strategy makes money. It tells you whether there is anything real underneath it &mdash; a necessary condition, not a sufficient one.</p>
+      <p class="eyebrow">case study &#183; PercepTrade</p>
+      <h2>A live BTC-perp agent, run by an LLM council. Verdict: NO_EDGE.</h2>
+      <p class="cs-hook reveal">The first signal put through touchstone was my own: <b>frZ</b>, a funding-rate z-score driving a live Bitget perpetual agent, gated by an Architect/Auditor/Arbiter council. <b>The first thing the harness killed was its maker's.</b></p>
 
-      <div class="axes">
-        <div class="axis reveal">
-          <div class="name">signal_alpha</div>
-          <div class="pair"><span style="color:var(--dead-deep)">NO_EDGE</span><span class="sep">/</span><span style="color:var(--live)">SURVIVES</span></div>
-          <p>Does the signal still predict forward returns after the five-stage gauntlet? Most don't. Surviving means the apparent edge is not explained by overlap, autocorrelation, market beta, multiple comparisons, or a few long episodes.</p>
+      <div class="result reveal" aria-label="PercepTrade falsification result">
+        <div class="grid3">
+          <div class="metric">
+            <div class="ml">sample size</div>
+            <div class="mv"><span class="from">785</span><span class="arr">&#8594;</span><span class="to">35</span></div>
+            <div class="ml" style="margin-top:8px;letter-spacing:0;text-transform:none;color:var(--gray)">firings collapse to independent episodes</div>
+          </div>
+          <div class="metric">
+            <div class="ml">t-stat (24h cell)</div>
+            <div class="mv"><span class="from">+4.87</span><span class="arr">&#8594;</span><span class="to">+1.51</span></div>
+            <div class="ml" style="margin-top:8px;letter-spacing:0;text-transform:none;color:var(--gray)">naive vs episode-corrected</div>
+          </div>
+          <div class="metric">
+            <div class="ml">significance</div>
+            <div class="mv"><span class="plain">min_p 0.090</span></div>
+            <div class="ml" style="margin-top:8px;letter-spacing:0;text-transform:none;color:var(--gray)">&#62; BH threshold 0.0083 &#183; 0 survivors of 6</div>
+          </div>
         </div>
-        <div class="axis reveal">
-          <div class="name">gate_selectivity</div>
-          <div class="pair"><span style="color:var(--dead-deep)">NOT_SELECTIVE</span><span class="sep">/</span><span style="color:var(--live)">SELECTIVE</span></div>
-          <p>Does a blocking layer &mdash; an LLM council, a rule gate, a hybrid &mdash; reject worse-than-random opportunities? Or is its veto, with all its apparent conviction and compute, indistinguishable from a coin flip?</p>
+        <div class="verdictbar">
+          <span class="lbl">signal_alpha across all six horizon&#215;side cells</span>
+          <span class="stamp">NO_EDGE</span>
         </div>
       </div>
-
-      <div class="orthogonal reveal">A signal can lose money and still be real; it can make money this month and be noise. Both axes are reported independent of PnL, on purpose.</div>
-    </div>
-  </section>
-
-  <!-- GAUNTLET -->
-  <section id="gauntlet">
-    <div class="wrap">
-      <p class="eyebrow">the signal_alpha gauntlet</p>
-      <h2>Five ways an edge can turn out to be nothing</h2>
-      <p class="sub">Each stage strips away one source of false significance. A signal has to survive all five.</p>
-
-      <div class="gaunt">
-        <div class="stage reveal">
-          <div class="num">01</div>
-          <div>
-            <h3>Overlapping-window t-stats</h3>
-            <p>Establish apparent significance per horizon &times; side. This is the number that looks impressive and usually isn't.</p>
-          </div>
-        </div>
-        <div class="stage reveal">
-          <div class="num">02</div>
-          <div>
-            <h3>Autocorrelation correction</h3>
-            <p>Overlapping returns are not independent. Effective sample size shrinks, and inflated t-stats deflate with it.</p>
-          </div>
-        </div>
-        <div class="stage reveal">
-          <div class="num">03</div>
-          <div>
-            <h3>Market-adjusted excess</h3>
-            <p>Strip out beta. An edge that was only riding the market's direction has nothing left once the market is removed.</p>
-          </div>
-        </div>
-        <div class="stage reveal">
-          <div class="num">04</div>
-          <div>
-            <h3>Multiple-comparison control</h3>
-            <p>Six horizon&times;side cells means six chances at a false positive. Benjamini&ndash;Hochberg (M=6) raises the bar accordingly.</p>
-          </div>
-        </div>
-        <div class="stage reveal">
-          <div class="num">05</div>
-          <div>
-            <h3>Episode clustering</h3>
-            <p>A signal that fires for 13 hours straight is one event, not 156 samples. Collapsing runs into episodes is where most survivors finally die.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- EVIDENCE -->
-  <section id="evidence">
-    <div class="wrap">
-      <p class="eyebrow">subject #1 &middot; frZ funding-rate signal</p>
-      <h2>What it looks like when an edge collapses</h2>
-      <p class="sub">The first signal put through touchstone was frZ &mdash; the funding-rate z-score driving a live BTC-perpetual agent on Bitget. Here is its readout, unedited.</p>
 
       <figure class="reveal">
         <div class="fig">
@@ -454,6 +448,89 @@
         </div>
         <figcaption>Naive t-stats (terracotta) treat all 785 five-minute firings as independent. Collapse them into 35 real episodes (teal) and <b>every |t| falls below 2, three cells flip sign entirely</b> &mdash; the signature of weighting-dependent noise, not edge.</figcaption>
       </figure>
+    </div>
+  </section>
+
+  <!-- WHY: the gauntlet, one line each -->
+  <section id="why">
+    <div class="wrap">
+      <p class="eyebrow">why it collapsed</p>
+      <h2>Five ways an edge turns out to be nothing</h2>
+      <p class="sub">Each stage strips away one source of false significance. A signal has to survive all five.</p>
+
+      <div class="gaunt">
+        <div class="stage reveal">
+          <div class="num">01</div>
+          <div><h3>Overlapping-window t-stats</h3>
+            <p>The impressive-looking number, computed per horizon &times; side. Usually it isn't real.</p></div>
+        </div>
+        <div class="stage reveal">
+          <div class="num">02</div>
+          <div><h3>Autocorrelation correction</h3>
+            <p>Overlapping returns aren't independent; effective sample size shrinks and inflated t-stats deflate with it.</p></div>
+        </div>
+        <div class="stage reveal">
+          <div class="num">03</div>
+          <div><h3>Market-adjusted excess</h3>
+            <p>Strip out beta &mdash; an edge that was only riding the market's direction has nothing left.</p></div>
+        </div>
+        <div class="stage reveal">
+          <div class="num">04</div>
+          <div><h3>Multiple-comparison control</h3>
+            <p>Six cells means six shots at a false positive; Benjamini&ndash;Hochberg (M=6) raises the bar accordingly.</p></div>
+        </div>
+        <div class="stage reveal">
+          <div class="num">05</div>
+          <div><h3>Episode clustering</h3>
+            <p>A signal that fires for 13 hours straight is one event, not 156 samples &mdash; where most survivors finally die.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TWO VERDICTS + gate mini case -->
+  <section id="verdicts">
+    <div class="wrap">
+      <p class="eyebrow">two verdicts, both orthogonal to profit</p>
+      <h2>Falsify the signal &mdash; and the layer that acts on it</h2>
+      <p class="sub">touchstone doesn't tell you whether a strategy makes money. It tells you whether there's anything real underneath it, on two independent axes.</p>
+
+      <div class="axes">
+        <div class="axis reveal">
+          <div class="name">signal_alpha</div>
+          <div class="pair"><span style="color:var(--dead-deep)">NO_EDGE</span><span class="sep">/</span><span style="color:var(--live)">SURVIVES</span></div>
+          <p>Does the signal still predict forward returns after all five stages? Most don't &mdash; including frZ above.</p>
+        </div>
+        <div class="axis reveal">
+          <div class="name">gate_selectivity</div>
+          <div class="pair"><span style="color:var(--dead-deep)">NOT_SELECTIVE</span><span class="sep">/</span><span style="color:var(--live)">SELECTIVE</span></div>
+          <p>Does a blocking layer &mdash; an LLM council, a rule gate, a hybrid &mdash; reject worse-than-random opportunities? Or is its veto a coin flip in disguise?</p>
+        </div>
+      </div>
+
+      <div class="gatecase reveal" aria-label="Gate selectivity mini case study">
+        <div class="gtitle">gate_selectivity &#183; the same agent's council vs a known-good control</div>
+        <div class="grow">
+          <span class="who">PercepTrade LLM council <span class="sm">&mdash; 193 real blocks</span></span>
+          <span class="pct">14.8th percentile vs random selection</span>
+          <span class="gv dead">NOT_SELECTIVE</span>
+        </div>
+        <div class="grow">
+          <span class="who">Oracle gate <span class="sm">&mdash; blocks the 193 worst by PnL</span></span>
+          <span class="pct">0th percentile &#183; planted positive control</span>
+          <span class="gv live">SELECTIVE</span>
+        </div>
+      </div>
+      <p class="sub" style="margin-top:16px">The council blocked with apparent conviction, yet its veto was statistically indistinguishable from chance. A gate that <em>is</em> selective &mdash; the oracle control &mdash; lands at the 0th percentile. The test tells them apart.</p>
+    </div>
+  </section>
+
+  <!-- SELF-CHECK -->
+  <section id="selfcheck">
+    <div class="wrap">
+      <p class="eyebrow">is the skeptic just broken?</p>
+      <h2>The harness proves its own detection power</h2>
+      <p class="sub">A tool that returns NO_EDGE for everything is useless. So touchstone tests itself: inject a known edge into the dead signal and the verdict must flip.</p>
 
       <figure class="reveal">
         <div class="fig">
@@ -505,12 +582,12 @@
 <text x='72' y='446' font-family='ui-sans-serif,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif' font-size='12' fill='#6b665e'>Spearman(&#945;, min_p) = &#8722;0.81. A planted edge is detected as it grows; the tool is not a timid always-veto.</text>
 </svg>
         </div>
-        <figcaption>The skeptic isn't broken. Inject a known edge into the dead signal and the verdict flips to <b>SURVIVES</b> once the leak is large enough (&#945;=0.35). A tool that always says NO_EDGE would be useless; this one detects a real edge when there is one.</figcaption>
+        <figcaption>Inject an increasing fraction of future-return leak into the dead frZ signal and min_p falls until the verdict flips to <b>SURVIVES</b> at &#945;=0.35 (Spearman &#8722;0.81). It detects a real edge when there is one &mdash; it is not a timid always-veto.</figcaption>
       </figure>
     </div>
   </section>
 
-  <!-- QUICKSTART -->
+  <!-- RUN IT -->
   <section id="start">
     <div class="wrap">
       <p class="eyebrow">run it</p>
@@ -522,15 +599,15 @@
 <pre><span class="pr">$</span> git clone https://github.com/cryptohakka/touchstone
 <span class="pr">$</span> cd touchstone
 
-<span class="cm"># falsify a signal: {timestamp, price, signal}</span>
+<span class="me"># start here &mdash; falsify a signal: {timestamp, price, signal}</span>
 <span class="pr">$</span> node src/index.mjs examples/perceptrade-frz/input.json --map signal=frZ
 <span class="cm">&#8594;</span> signal_alpha: <span class="ne">NO_EDGE</span>
 
-<span class="cm"># positive control: a deliberately planted edge survives</span>
+<span class="cm"># then: a deliberately planted edge survives</span>
 <span class="pr">$</span> node src/index.mjs examples/synthetic-leak/input.json
 <span class="cm">&#8594;</span> signal_alpha: <span class="sv">SURVIVES</span>
 
-<span class="cm"># prove the harness's own power: inject leak into the dead signal</span>
+<span class="cm"># finally: prove the harness's own power on the dead signal</span>
 <span class="pr">$</span> node src/index.mjs examples/perceptrade-frz/input.json --map signal=frZ --selfcheck
 <span class="cm">&#8594;</span> selfcheck: <span class="sv">PASS</span>  <span class="cm"># first SURVIVES at &#945;=0.35</span></pre>
       </div>
@@ -565,7 +642,7 @@
     <div class="meta">
       <a href="https://github.com/cryptohakka/touchstone">github.com/cryptohakka/touchstone &#8599;</a><br>
       MIT &#183; zero-dependency &#183; Node.js 18+<br>
-      subject #1: PercepTrade, a live Bitget perp agent<br>
+      case study: PercepTrade, a live Bitget perp agent<br>
       built by <a href="https://github.com/cryptohakka">@cryptohakka</a> &#183; <a href="https://a2aflow.space">a2aflow.space</a>
     </div>
   </div>
