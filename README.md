@@ -125,11 +125,16 @@ honesty of a `NO_EDGE`: at this episode count the smallest reliably-detectable e
 2. **Beta-adjust** — subtract the horizon's market drift, so gains that were just the
    underlying's beta don't count as signal.
 3. **Episode-collapse** — merge consecutive same-sign firings into independent episodes.
-   This is where t-stats inflated by autocorrelation die (naive t=4–13 → episode t=0.3–2.7
-   on the subject signal).
+   This is where t-stats inflated by autocorrelation die: on the subject signal the
+   strongest cell's naive |t|≈4.9 collapses to episode |t|<2, and three of the six cells
+   flip sign once each event is counted once instead of once per 5-minute firing.
 4. **Multiple comparison** (Benjamini-Hochberg + Bonferroni) across all horizon×side cells.
 5. **Power** — report the minimum detectable effect at the episode-level n, so `NO_EDGE`
    is bounded rather than overclaimed.
+
+![Per horizon by side cell, the naive t-statistics that treat all 785 firings as independent collapse once the firings are grouped into 35 independent episodes; every absolute t falls below 2 and three cells flip sign, so no cell survives correction.](assets/episode_collapse.svg)
+
+*Naive vs episode t on the frZ subject. 785 autocorrelated firings collapse to 35 independent episodes; `min_p = 0.090` &gt; the BH threshold `0.0083` → `NO_EDGE`.*
 
 ## Self-validation
 
@@ -153,6 +158,10 @@ The subject signal's own baseline is `NO_EDGE` with a raw `min_p` that looks tem
 isolation but dies under correction — while the *harness* clearly detects a planted edge
 at α=0.35. Read together: the tool finds edge when it exists; the subject just doesn't
 have it.
+
+![Leak-injection self-check: as the fraction of injected future-return leak rises, min_p falls monotonically and the verdict flips from NO_EDGE to SURVIVES once it crosses the BH threshold at alpha = 0.35.](assets/leak_curve.svg)
+
+*Detection-power curve. Injecting a graded future-return leak into the dead frZ signal drives `min_p` below the BH threshold at **α=0.35** (Spearman −0.81) — the harness detects real edge rather than always vetoing.*
 
 ## The Gate Selectivity Test
 
