@@ -1,0 +1,58 @@
+{
+  "tool": "touchstone",
+  "version": "0.1.0",
+  "generated_at": "2026-06-18T10:55:48.307Z",
+  "headline": "signal: NO_EDGE",
+  "signal_alpha": {
+    "axis": "signal_alpha",
+    "verdict": "NO_EDGE",
+    "n_snapshots": 3101,
+    "window": {
+      "from": "2026-06-06T14:37:16.700Z",
+      "to": "2026-06-17T16:03:23.267Z"
+    },
+    "n_episodes": 87,
+    "episodes_by_side": {
+      "high": 45,
+      "low": 42
+    },
+    "threshold": 1.5,
+    "cadence_snapshots_per_hour": 12,
+    "horizons_hours": [
+      6,
+      12,
+      24
+    ],
+    "multiple_comparison": {
+      "method": "BH",
+      "M": 6,
+      "min_episodes": 5,
+      "bh_rejected": [],
+      "bonferroni_survivors": [],
+      "min_p": 0.0447,
+      "min_p_cell": "12h HIGH-signal(z>=+TH)",
+      "underpowered_excluded": []
+    },
+    "power": [
+      {
+        "n_episodes": 36,
+        "min_detectable_d": 0.58
+      },
+      {
+        "n_episodes": 37,
+        "min_detectable_d": 0.57
+      },
+      {
+        "n_episodes": 41,
+        "min_detectable_d": 0.54
+      },
+      {
+        "n_episodes": 43,
+        "min_detectable_d": 0.53
+      }
+    ],
+    "note": "No detectable edge != no edge exists. This verdict is bounded by statistical power at the episode-level n above."
+  },
+  "gate_selectivity": null,
+  "disclaimer": "Both axes are orthogonal to realized PnL. A SURVIVES / SELECTIVE result is necessary, not sufficient, for a profitable system."
+}

@@ -262,6 +262,20 @@ leak → `SURVIVES`, and that the synthetic self-check first flips at **α=0.2**
 figure in Self-validation is the frZ *subject*, which is harder to revive than synthetic
 noise — consistent with it carrying no edge of its own.)
 
+## Examples
+
+Five bundled examples double as verifiable usage records (`examples/`). Every *real*
+signal tested — the author's own and a classic indicator — fails; only the synthetic
+positive controls pass, which is how you know the harness discriminates.
+
+| example | verdict | what it shows |
+|---------|---------|---------------|
+| `random-walk-null` | `NO_EDGE` | pure noise — the harness does not invent edge |
+| `perceptrade-frz` | `NO_EDGE` + gate `NOT_SELECTIVE` | the author's funding-rate strategy and its LLM council |
+| `rsi-mean-reversion` | `NO_EDGE` | RSI(14) — a classic indicator is not rubber-stamped |
+| `synthetic-leak` | `SURVIVES` | planted future-return leak — alpha-axis detection power |
+| `llm-council` (oracle gate) | `SELECTIVE` | a gate that really blocks losers — gate-axis detection power |
+
 ## Related work
 
 The overfitting-detection family — Probabilistic Sharpe Ratio, **Deflated Sharpe Ratio**,
