@@ -278,9 +278,9 @@
       <span>touchstone<span class="dot">.</span></span>
     </span>
     <nav>
-      <a href="#verdicts">axes</a>
       <a href="#case">case study</a>
       <a href="#why">why</a>
+      <a href="#verdicts">verdicts</a>
       <a href="#gate-case">gate</a>
       <a class="repo" href="https://github.com/cryptohakka/touchstone">repo &#8599;</a>
     </nav>
@@ -325,32 +325,6 @@
       <span class="tag">MIT</span>
     </div>
   </div>
-
-  <!-- TWO VERDICTS + gate mini case -->
-  <section id="verdicts">
-    <div class="wrap">
-      <p class="eyebrow">two axes, both orthogonal to profit</p>
-      <h2>touchstone falsifies on two separate axes</h2>
-      <p class="sub">It never tells you whether a strategy makes money. It asks two independent questions: is the <em>signal</em> real, and is the <em>layer</em> that acts on it actually selective? A thing can pass one and fail the other. Each axis has its own worked example below.</p>
-
-      <div class="axes">
-        <div class="axis reveal">
-          <div class="name">signal_alpha</div>
-          <div class="pair"><span style="color:var(--dead-deep)">NO_EDGE</span><span class="sep">/</span><span style="color:var(--live)">SURVIVES</span></div>
-          <p>Does the signal still predict forward returns after all five stages? Most don't.</p>
-          <div class="res"><span class="rl">worked example</span><span class="rv dead">frZ &#8594; NO_EDGE</span><a class="seehere" href="#case">see case study &#8595;</a></div>
-        </div>
-        <div class="axis reveal">
-          <div class="name">gate_selectivity</div>
-          <div class="pair"><span style="color:var(--dead-deep)">NOT_SELECTIVE</span><span class="sep">/</span><span style="color:var(--live)">SELECTIVE</span></div>
-          <p>Does a blocking layer &mdash; an LLM council, a rule gate, a hybrid &mdash; reject worse-than-random opportunities? Or is its veto a coin flip in disguise?</p>
-          <div class="res"><span class="rl">worked example</span><span class="rv dead">council &#8594; NOT_SELECTIVE</span><a class="seehere" href="#gate-case">see below &#8595;</a></div>
-        </div>
-      </div>
-
-      
-    </div>
-  </section>
 
   <!-- CASE STUDY: result first -->
   <section id="case">
@@ -537,7 +511,35 @@
         </div>
       </figure>
     </div>
-  </section><!-- GATE CASE STUDY: the second axis, in full -->
+  </section>
+
+  <!-- TWO VERDICTS + gate mini case -->
+  <section id="verdicts">
+    <div class="wrap">
+      <p class="eyebrow">two axes, both orthogonal to profit</p>
+      <h2>touchstone falsifies on two separate axes</h2>
+      <p class="sub">It never tells you whether a strategy makes money. It asks two independent questions: is the <em>signal</em> real, and is the <em>layer</em> that acts on it actually selective? A thing can pass one and fail the other. Each axis has its own worked example below.</p>
+
+      <div class="axes">
+        <div class="axis reveal">
+          <div class="name">signal_alpha</div>
+          <div class="pair"><span style="color:var(--dead-deep)">NO_EDGE</span><span class="sep">/</span><span style="color:var(--live)">SURVIVES</span></div>
+          <p>Does the signal still predict forward returns after all five stages? Most don't.</p>
+          <div class="res"><span class="rl">worked example</span><span class="rv dead">frZ &#8594; NO_EDGE</span><a class="seehere" href="#case">see case study &#8593;</a></div>
+        </div>
+        <div class="axis reveal">
+          <div class="name">gate_selectivity</div>
+          <div class="pair"><span style="color:var(--dead-deep)">NOT_SELECTIVE</span><span class="sep">/</span><span style="color:var(--live)">SELECTIVE</span></div>
+          <p>Does a blocking layer &mdash; an LLM council, a rule gate, a hybrid &mdash; reject worse-than-random opportunities? Or is its veto a coin flip in disguise?</p>
+          <div class="res"><span class="rl">worked example</span><span class="rv dead">council &#8594; NOT_SELECTIVE</span><a class="seehere" href="#gate-case">see below &#8595;</a></div>
+        </div>
+      </div>
+
+      
+    </div>
+  </section>
+
+  <!-- GATE CASE STUDY: the second axis, in full -->
   <section id="gate-case">
     <div class="wrap">
       <p class="eyebrow">case study &#183; the gate axis</p>
