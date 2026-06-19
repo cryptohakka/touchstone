@@ -120,13 +120,6 @@
     margin:22px 0 0;font-size:18px;line-height:1.5;max-width:54ch;
   }
   .hook b{font-weight:700}
-  .tags{margin:30px 0 0;display:flex;flex-wrap:wrap;gap:8px}
-  .tag{
-    font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;
-    color:var(--gray);border:1px solid var(--hair);border-radius:999px;
-    padding:5px 11px;background:#fff7;
-  }
-
   /* ---------- generic section ---------- */
   section{padding:62px 0;border-top:1px solid var(--hair)}
   section h2{
@@ -149,11 +142,6 @@
   .axis .res .rv.dead{color:var(--dead-deep)}
   .axis .res .seehere{font-family:var(--mono);font-size:11.5px;color:var(--gray);text-decoration:none;margin-left:auto;border-bottom:1px solid var(--hair)}
   .axis .res .seehere:hover{color:var(--ink)}
-    .orthogonal{
-    margin-top:24px;font-family:var(--mono);font-size:13px;color:var(--mute);
-    display:flex;gap:10px;align-items:flex-start;
-  }
-  .orthogonal::before{content:"//";color:var(--dead);font-weight:700}
 
   /* gauntlet — real ordered sequence */
   .gaunt{margin-top:32px;border-top:1px solid var(--hair)}
@@ -236,9 +224,6 @@
   .verdictbar .lbl{font-family:var(--mono);font-size:12px;color:var(--gray);letter-spacing:.04em}
   .verdictbar .stamp{font-family:var(--mono);font-size:19px;font-weight:700;letter-spacing:.05em;color:var(--dead-deep);border:1.5px solid var(--dead);border-radius:7px;padding:5px 13px;transform:rotate(-1.6deg)}
 
-  /* --- punch line under hero --- */
-  .punch{font-size:clamp(18px,2.3vw,22px);font-weight:700;letter-spacing:-.008em;line-height:1.24;color:var(--ink);margin:26px 0 0;max-width:26ch}
-  .punch .em{color:var(--dead-deep)}
 
   /* --- gate mini case --- */
   .gatecase{margin-top:28px;border:1px solid var(--hair);border-radius:10px;overflow:hidden}
@@ -315,12 +300,6 @@
       </div>
     </div>
 
-    <div class="tags reveal">
-      <span class="tag">falsifies any scalar signal</span>
-      <span class="tag">audits LLM / rule decision layers</span>
-      <span class="tag">offline &amp; deterministic</span>
-      <span class="tag">MIT</span>
-    </div>
   </div>
 
   <!-- TWO VERDICTS + gate mini case -->
@@ -757,7 +736,7 @@
           <polygon points="32,40 17,39 26,24" fill="#27675e"/>
         </g>
         <line x1="30" y1="7.4" x2="41.4" y2="17" stroke="#7fd8cc" stroke-width="1.2" stroke-linecap="round"/>
-      </svg>touchstone is a falsification harness, not a strategy. It answers one question honestly &mdash; is there anything real here &mdash; so an agent never acts on a measurement artifact with full size and full conviction.</p>
+      </svg>touchstone falsifies a signal or a gate before an agent trades on it.</p>
     <div class="meta">
       <a href="https://github.com/cryptohakka/touchstone">github.com/cryptohakka/touchstone &#8599;</a><br>
       MIT &#183; zero-dependency &#183; Node.js 18+<br>
