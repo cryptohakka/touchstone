@@ -115,7 +115,7 @@ Then map your column names as usual: `--map time=time price=close signal=rsi`.
   },
   "gate_selectivity": {
     "verdict": "NOT_SELECTIVE",
-    "firing_pool": { "gate_mean": -0.3074, "random_mean": -0.2477, "percentile": 13.8 },
+    "firing_pool": { "gate_mean": -0.3074, "random_mean": -0.2493, "percentile": 14.8 },
     "note": "Gate selectivity is orthogonal to PnL."
   },
   "disclaimer": "Both axes are orthogonal to realized PnL."
