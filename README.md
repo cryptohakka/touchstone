@@ -17,6 +17,8 @@ system.
 > driven by an LLM council; touchstone reports it `NO_EDGE` with a `NOT_SELECTIVE` gate.
 > The first thing it kills is its maker's.
 
+**Demo walkthrough (≤3 min):** https://youtu.be/ukLcTlRxl7M
+
 ---
 
 ## 30-second quickstart
