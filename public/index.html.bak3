@@ -279,8 +279,9 @@
     </span>
     <nav>
       <a href="#verdicts">axes</a>
-      <a href="#case">case study &middot; signal_alpha</a>
-      <a href="#gate-case">case study &middot; gate_selectivity</a>
+      <a href="#case">case study</a>
+      <a href="#why">why</a>
+      <a href="#gate-case">gate</a>
       <a class="repo" href="https://github.com/cryptohakka/touchstone">repo &#8599;</a>
     </nav>
   </div>
@@ -354,7 +355,7 @@
   <!-- CASE STUDY: result first -->
   <section id="case">
     <div class="wrap">
-      <p class="eyebrow">case study &#183; signal_alpha</p>
+      <p class="eyebrow">case study &#183; PercepTrade</p>
       <h2>A live BTC-perp agent, run by an LLM council. Verdict: NO_EDGE.</h2>
       <p class="cs-hook reveal">The first signal put through touchstone was my own: <b>frZ</b>, a funding-rate z-score driving a live Bitget perpetual agent, gated by an Architect/Auditor/Arbiter council. <b>The first thing the harness killed was its maker's.</b></p>
 
@@ -481,8 +482,10 @@
         <figcaption>Naive t-stats (terracotta) treat all 785 five-minute firings as independent. Collapse them into 35 real episodes (teal) and <b>every |t| falls below 2, three cells flip sign entirely</b> &mdash; the signature of weighting-dependent noise, not edge.</figcaption>
       </figure>
     </div>
-  
-      <div id="why" style="margin-top:56px;padding-top:40px;border-top:1px solid var(--hair)">
+  </section>
+
+  <!-- WHY: the gauntlet, one line each -->
+  <section id="why">
     <div class="wrap">
       <p class="eyebrow">why it collapsed</p>
       <h2>Five ways an edge turns out to be nothing</h2>
@@ -534,11 +537,10 @@
         </div>
       </figure>
     </div>
-  </div>
-</section><!-- GATE CASE STUDY: the second axis, in full -->
+  </section><!-- GATE CASE STUDY: the second axis, in full -->
   <section id="gate-case">
     <div class="wrap">
-      <p class="eyebrow">case study &#183; gate_selectivity</p>
+      <p class="eyebrow">case study &#183; the gate axis</p>
       <h2>The same agent's council blocked 193 trades. Verdict: NOT_SELECTIVE.</h2>
       <p class="cs-hook reveal">A blocking layer can look decisive and still be noise. touchstone's second axis asks whether the council's 193 vetoes beat random selection from the same firing pool. <b>They don't.</b></p>
 
