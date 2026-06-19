@@ -58,40 +58,53 @@ export function runSelfCheck(series, opts = {}) {
   // leak target = standardized, market-adjusted (beta removed) future-H return.
   // Beta-adjust matches the engine's own drift removal, so the injected thing is
   // genuine beta-excess edge, not the market trend the engine already strips.
+  //
+  // zRaw is the signal exactly as the production verdict sees it (no transform —
+  // this is what `--map` feeds into runAlpha). baseline/null_shuffle/null_sign_flip
+  // all run on zRaw so they reproduce the same numbers a judge gets from the main
+  // command. zOrigStd is a standardized COPY used only for the alpha-mixing curve,
+  // where z and the leak signal need a common scale to combine meaningfully.
+  const zRaw = series.map(s => s.z);
   const fwd = new Array(n).fill(NaN);
   for (let i = 0; i < n; i++) { const j = i + H * sph; if (j < n) fwd[i] = (series[j].p - series[i].p) / series[i].p; }
   const betaH = mean(fwd.filter(Number.isFinite));
   const zLeak = standardize(fwd.map(v => Number.isFinite(v) ? v - betaH : NaN));
-  const zOrig = standardize(series.map(s => s.z));
+  const zOrigStd = standardize(zRaw);
 
   // (A) graded leak curve. Re-standardize each mix so TH=1.5 means the same
   // thing at every alpha (isolates info content from scale / firing-rate).
+  // This curve intentionally operates in standardized space — only the relative
+  // detection-power story (does min_p fall as alpha grows?) matters here.
   const curve = alphas.map(al => {
-    const mixed = standardize(zOrig.map((z, i) => (1 - al) * z + al * zLeak[i]));
+    const mixed = standardize(zOrigStd.map((z, i) => (1 - al) * z + al * zLeak[i]));
     const r = run(mixed);
     return { alpha: al, min_p: round(r.minP), bh_survivors: r.survivors, verdict: r.verdict, _raw: r.minP };
   });
-  const baseRun = curve[0];                         // alpha = 0  == original signal
   const top = curve[curve.length - 1];              // alpha = 1  == pure leak
   const firstSurvive = curve.find(c => c.verdict === 'SURVIVES');
   const rho = spearman(curve.map(c => c.alpha), curve.map(c => c._raw));
 
-  // (B) shuffle null (seeded Fisher-Yates) — must stay NO_EDGE
+  // True baseline: the signal exactly as production sees it. Must match the
+  // min_p a judge gets from `node src/index.mjs ... --map ...` on this data.
+  const baseRun = run(zRaw);
+
+  // (B) shuffle null (seeded Fisher-Yates) — must stay NO_EDGE. Shuffles the
+  // RAW signal so this null is on the same basis as the production verdict.
   const rnd = mulberry32(seed);
-  const zsh = zOrig.slice();
+  const zsh = zRaw.slice();
   for (let i = zsh.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [zsh[i], zsh[j]] = [zsh[j], zsh[i]]; }
   const shuffle = run(zsh);
 
   // (C) sign-flip invariance — two-sided test must give identical min_p
-  const flip = run(zOrig.map(z => -z));
+  const flip = run(zRaw.map(z => -z));
 
   const powerDemonstrated = baseRun.verdict === 'NO_EDGE' && top.verdict === 'SURVIVES' && rho < 0;
   const noFalsePositive = shuffle.verdict === 'NO_EDGE';
-  const directionInvariant = Number.isFinite(flip.minP) && Number.isFinite(baseRun._raw) && Math.abs(flip.minP - baseRun._raw) < 1e-6;
+  const directionInvariant = Number.isFinite(flip.minP) && Number.isFinite(baseRun.minP) && Math.abs(flip.minP - baseRun.minP) < 1e-6;
 
   return {
     config: { leak_horizon_h: H, alpha_grid: alphas, threshold: TH, horizons, seed, M: 2 * horizons.length },
-    baseline_signal: { min_p: baseRun.min_p, bh_survivors: baseRun.bh_survivors, verdict: baseRun.verdict },
+    baseline_signal: { min_p: round(baseRun.minP), bh_survivors: baseRun.survivors, verdict: baseRun.verdict },
     detection_power: {
       claim: 'verdict flips NO_EDGE -> SURVIVES as genuine future-leak is mixed in',
       leak_curve: curve.map(({ alpha, min_p, bh_survivors, verdict }) => ({ alpha, min_p, bh_survivors, verdict })),

@@ -2,7 +2,7 @@
   "tool": "touchstone",
   "mode": "selfcheck",
   "version": "0.1.0",
-  "generated_at": "2026-06-18T05:13:38.844Z",
+  "generated_at": "2026-06-19T06:11:18.931Z",
   "config": {
     "leak_horizon_h": 24,
     "alpha_grid": [
@@ -25,7 +25,7 @@
     "M": 6
   },
   "baseline_signal": {
-    "min_p": 0.0261,
+    "min_p": 0.0897,
     "bh_survivors": 0,
     "verdict": "NO_EDGE"
   },
@@ -87,14 +87,14 @@
   },
   "null_shuffle": {
     "claim": "time-shuffled signal must stay NO_EDGE",
-    "min_p": 0.1057,
+    "min_p": 0.1442,
     "bh_survivors": 0,
     "verdict": "NO_EDGE",
     "passes": true
   },
   "null_sign_flip": {
     "claim": "two-sided verdict must be invariant to z -> -z (label swap only)",
-    "min_p": 0.0261,
+    "min_p": 0.0897,
     "bh_survivors": 0,
     "verdict": "NO_EDGE",
     "passes": true
